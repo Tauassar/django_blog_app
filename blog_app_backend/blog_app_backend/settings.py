@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.users_app'
 ]
 
 MIDDLEWARE = [
@@ -159,14 +160,14 @@ LOGGING = {
         },
     },
     'loggers': {
-        'admissions': {
+        'apps': {
             'handlers': ['log_file', 'console'],
-            'level': 'INFO',
+            'level': VAR_ROOT,
             'propagate': True,
         },
     },
     'root': {
-        'handlers': ['console', 'mail_admins', 'log_file'],
+        'handlers': ['console', 'log_file'],
         'level': VAR_ROOT
     },
 }
