@@ -21,6 +21,7 @@ class BlogEntity(models.Model):
 class ReadBlogs(models.Model):
     class Meta:
         db_table = 'read_blogs'
+        verbose_name_plural = "Read blogs"
 
     user = models.ForeignKey(
         CustomUser,
