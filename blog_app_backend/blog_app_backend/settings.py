@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-1(%9&2z#@f6ua=^$w99*4oyd&tr6j+^%si_n9qscc1pyzyd$mj'
+AUTH_USER_MODEL = "users_app.CustomUser"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
