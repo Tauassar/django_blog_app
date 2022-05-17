@@ -6,7 +6,7 @@ from apps.blogs_app.views import BlogView, ReadBlogsView
 
 router = DefaultRouter()
 router.register(r'', BlogView, basename="blogs")
-router.register(r'/read', ReadBlogsView, basename="read")
+router.register(r'read', ReadBlogsView, basename="read")
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

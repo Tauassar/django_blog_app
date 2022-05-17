@@ -63,7 +63,7 @@ class BlogView(ModelViewSet):
             creator_id__in=following_users_list
         ).exclude(id__in=to_exclude)
 
-    @action(methods=["get"], detail=False, url_path="/feed", url_name="blogs_feed")
+    @action(methods=["get"], detail=False, url_path="feed", url_name="blogs_feed")
     def list_feed_blogs(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_feed_queryset())
 

@@ -34,7 +34,7 @@ DEBUG = True
 VAR_ROOT = 'DEBUG' if DEBUG else 'INFO'
 
 ALLOWED_HOSTS = ['*']
-
+CELERY_BROKER_URL = 'redis://redis:6379'
 
 # Application definition
 
@@ -88,12 +88,12 @@ WSGI_APPLICATION = 'blog_app_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'SQL_DATABASE': 'django_webapp',
-        'SQL_USER': 'postgres',
-        'SQL_PASSWORD': 'postgres',
-        'SQL_HOST': 'db',
-        'SQL_PORT': 5432,
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     },
     'dev': {
         'ENGINE': 'django.db.backends.sqlite3',
