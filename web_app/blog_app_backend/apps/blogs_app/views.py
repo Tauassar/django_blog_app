@@ -8,7 +8,8 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from apps.blogs_app.models import BlogEntity, ReadBlogs
 from apps.blogs_app.paginators import BlogEntityPagination
 from apps.blogs_app.serializers import BlogEntitySerializer, ReadBlogsSerializer
-from apps.blogs_app.utils import get_read_blogs, get_following_users_list
+from apps.blogs_app.utils import get_read_blogs, get_following_users_list, get_feed_queryset
+from blog_app_backend.celery import debug_task
 
 logger = logging.getLogger(__name__)
 
@@ -44,28 +45,13 @@ class BlogView(ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         request_user = self.request.user
-
         return queryset.filter(
             creator_id=request_user.id
         )
 
-    def get_feed_queryset(self):
-        """
-        Filtering data for reading blog feed
-        :return:
-        """
-        queryset = self.queryset
-        request_user = self.request.user
-        following_users_list = get_following_users_list(request_user)
-        to_exclude = get_read_blogs(request_user)
-
-        return queryset.filter(
-            creator_id__in=following_users_list
-        ).exclude(id__in=to_exclude)
-
     @action(methods=["get"], detail=False, url_path="feed", url_name="blogs_feed")
     def list_feed_blogs(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_feed_queryset())
+        queryset = get_feed_queryset(self.request.user)
 
         page = self.paginate_queryset(queryset)
         if page is not None:

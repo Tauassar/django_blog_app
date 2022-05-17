@@ -5,11 +5,29 @@ services:
     image: redis
     restart: always
 
+  celery-scheduler:
+    restart: always
+    build:
+      context: ./web_app
+    command: [ 'celery', '--workdir=./blog_app_backend', '-A', 'blog_app_backend', 'beat', '-l', 'DEBUG' ]
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    restart: always
+    build:
+      context: ./web_app
+    command: [ 'celery', '--workdir=./blog_app_backend', '-A', 'blog_app_backend', 'worker' ]
+    depends_on:
+      - db
+      - redis
+
   db:
     restart: always
     image: postgres
     environment:
-      - POSTGRES_DB=django_webapp
+      - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
@@ -17,7 +35,9 @@ services:
     restart: always
     build:
       context: ./web_app
-    command: [ "python3", "./blog_app_backend/manage.py", "runserver", "0.0.0.0:8000"]
+    command:
+      sh -c "python ./blog_app_backend/manage.py migrate &&
+             python ./blog_app_backend/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:

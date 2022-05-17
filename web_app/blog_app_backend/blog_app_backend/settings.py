@@ -14,6 +14,8 @@ import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SIMPLE_JWT = {
@@ -34,7 +36,6 @@ DEBUG = True
 VAR_ROOT = 'DEBUG' if DEBUG else 'INFO'
 
 ALLOWED_HOSTS = ['*']
-CELERY_BROKER_URL = 'redis://redis:6379'
 
 # Application definition
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
     'apps.users_app',
     'apps.blogs_app'
 ]
@@ -82,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blog_app_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -100,7 +101,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -120,18 +120,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -197,4 +195,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
+}
+
+# CELERY_SETTINGS
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_TIMEZONE = 'Asia/Dhaka'
+CELERY_BEAT_SCHEDULE = {
+    'send_emails': {
+        'task': 'send_digest_feed_to_all_users_via_email',
+        # 'schedule': crontab(minute=24, hour=17),
+        'schedule': 30.0,
+    }
 }

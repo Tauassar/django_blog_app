@@ -8,6 +8,7 @@ from rest_framework import status
 
 
 from apps.users_app.serializers import FollowingSerializer
+from blog_app_backend.celery import debug_task
 
 logger = logging.getLogger(__name__)
 

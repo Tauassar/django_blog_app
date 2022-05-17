@@ -1,3 +1,4 @@
+import logging
 import os
 
 from celery import Celery
@@ -16,7 +17,9 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
+logger = logging.getLogger(__name__)
+
 
 @app.task(bind=True)
 def debug_task(self):
-    print(f'Request: {self.request!r}')
+    logger.info(f'Request: should be request, but it is too messy:(')
