@@ -22,6 +22,7 @@ GET
   api/blogs/read/<id> - Для получения прочитанного блога<br/>
 
 POST
+
   api/auth/token - для получения авторизационного токена<br/>
   api/auth/token/refresh - для обновления авторизационного токена<br/>
   api/blogs/ - для создания блога<br/>
@@ -29,6 +30,7 @@ POST
   api/user/subscription - для подписки на других пользователей<br/>
   
 DELETE
+
   api/blogs/<id> - для удаления блога<br/>
   api/blogs/read/<id> - для блока непрочитанным<br/>
   api/user/subscription/<id> - для отписки на других пользователей<br/>
