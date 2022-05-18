@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'blog_app_backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'dev': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv('POSTGRES_NAME'),
         'USER': os.getenv('POSTGRES_USER'),
@@ -96,7 +96,7 @@ DATABASES = {
         'HOST': 'db',
         'PORT': 5432,
     },
-    'default': {
+    'dev': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
@@ -167,23 +167,30 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
-        'log_file': {
-            'level': VAR_ROOT,
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'maxBytes': 1024 * 1024 * 16,  # 16megabytes
-            'formatter': 'verbose'
-        },
+        # To enable this logging option backend directory should have logs folder with django.log file
+        # 'log_file': {
+        #     'level': VAR_ROOT,
+        #     'class': 'logging.handlers.RotatingFileHandler',
+        #     'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+        #     'maxBytes': 1024 * 1024 * 16,  # 16megabytes
+        #     'formatter': 'verbose'
+        # },
     },
     'loggers': {
         'apps': {
-            'handlers': ['log_file', 'console'],
+            'handlers': [
+                # 'log_file',
+                'console'
+            ],
             'level': VAR_ROOT,
             'propagate': True,
         },
     },
     'root': {
-        'handlers': ['console', 'log_file'],
+        'handlers': [
+            'console',
+            # 'log_file'
+        ],
         'level': VAR_ROOT
     },
 }
@@ -199,11 +206,13 @@ REST_FRAMEWORK = {
 
 # CELERY_SETTINGS
 CELERY_BROKER_URL = 'redis://redis:6379'
+# UTC +6
 CELERY_TIMEZONE = 'Asia/Dhaka'
 CELERY_BEAT_SCHEDULE = {
     'send_emails': {
         'task': 'send_digest_feed_to_all_users_via_email',
-        # 'schedule': crontab(minute=24, hour=17),
-        'schedule': 30.0,
+        # change this parameter in order to change email sending time
+        'schedule': crontab(minute=25, hour=17),
+        # 'schedule': 30.0,
     }
 }
